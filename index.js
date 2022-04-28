@@ -1,5 +1,3 @@
-console.log('test')
-
 const url = 
     'https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&rows=10&facet=name&facet=is_installed&facet=is_renting&facet=is_returning&facet=nom_arrondissement_communes';
 
@@ -15,7 +13,7 @@ function recuperatePrice() {
 
     //Pour l'instant on ne récupère pas le résultat. Dès qu'on reçoit une réponse on éxécute une la fonction suivante :
 
-    request.onload = function() {
+    request.onload = function() { //affichage
         if (request.readyState === XMLHttpRequest.DONE) { //est-ce que l'état actuel de notre requête === done/accompli ?
             if(request.status === 200){ //si tout est ok code 200
                 let response = request.response; // on stock la réponse 
@@ -29,4 +27,48 @@ function recuperatePrice() {
     }
     console.log("Prix actualisé");
 }
-setInterval(recuperatePrice, 50000);
+setInterval(recuperatePrice, 50000); 
+
+
+
+
+
+
+
+
+//1.Create selectors
+const searchFrom = document.querySelector('.search');
+const input = document.querySelector('.input');
+const movieList = document.querySelector('.movie-list');
+
+//2.Add event listener
+searchFrom.addEventListener('submit', retrieve)
+
+//3.Retrieve typed content function
+function retrieve(e){
+
+    e.preventDefault() //event
+    
+    let movie = input.value;
+
+    let url = `http://www.omdbapi.com/?t=${movie}&apikey=${apiKey}`
+
+    fetch(url).then((data) => {
+        return data.json()
+    }).then ((data) => {
+        console.log(data)
+        data.Object.foreach((movieValue) =>{
+
+            let dataShow = "";
+            dataShow = `<p>${movieValue.Title}</p>`;
+            document.querySelector('movie-title').innerHTML += dataShow ; //sélection classe pour déposer
+            
+        });
+
+    }).catch((err) =>{
+        console.log('error')
+    })
+    console.log(movie)
+}
+// */
+
